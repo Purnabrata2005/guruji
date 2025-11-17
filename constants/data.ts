@@ -1,3 +1,4 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import icons from "./icons";
 
 export const cards = [
@@ -59,39 +60,42 @@ export const categories = [
   { title: "Townhomes", category: "Townhomes" },
   { title: "Others", category: "Others" },
 ];
-
-export const settings = [
+interface SettingsItemProp {
+  title: string;
+  icon: keyof typeof Ionicons.glyphMap;
+}
+export const settings: SettingsItemProp[] = [
   {
     title: "My Bookings",
-    icon: icons.calendar,
+    icon: "calendar-outline",
   },
   {
     title: "Payments",
-    icon: icons.wallet,
+    icon: "wallet-outline",
   },
   {
     title: "Profile",
-    icon: icons.person,
+    icon: "person-outline",
   },
   {
     title: "Notifications",
-    icon: icons.bell,
+    icon: "notifications-outline",
   },
   {
     title: "Security",
-    icon: icons.shield,
+    icon: "shield-checkmark-outline",
   },
   {
     title: "Language",
-    icon: icons.language,
+    icon: "language-outline",
   },
   {
     title: "Help Center",
-    icon: icons.info,
+    icon: "help-circle-outline",
   },
   {
     title: "Invite Friends",
-    icon: icons.people,
+    icon: "people-outline",
   },
 ];
 

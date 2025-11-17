@@ -1,8 +1,8 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     "Rubik-Bold": require("../assets/fonts/Rubik-Bold.ttf"),
@@ -11,6 +11,7 @@ export default function RootLayout() {
     "Rubik-Medium": require("../assets/fonts/Rubik-Medium.ttf"),
     "Rubik-Regular": require("../assets/fonts/Rubik-Regular.ttf"),
     "Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
+    ...Ionicons.font,
   });
   useEffect(() => {
     if (fontsLoaded) {

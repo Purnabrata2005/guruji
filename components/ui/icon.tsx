@@ -1,215 +1,34 @@
-import {
-  // Image, // Removed from react-native
-  // ImageSourcePropType, // 1. Removed this
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-// 2. Import ImageSource from expo-image
-import { Image } from "@/components/ui/image";
-import { ImageSource } from "expo-image";
-
-import { showErrorAlert, showSuccessAlert } from "@/components/ui/alert";
-import { settings } from "@/constants/data";
-import icons from "@/constants/icons";
 import { useColor } from "@/hooks/useColor";
-import { FONT_SIZE } from "@/theme/globals";
+import { LucideProps } from "lucide-react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-interface SettingsItemProp {
-  icon: ImageSource; // 3. Changed type to ImageSource
-  title: string;
-  onPress?: () => void;
-  textColor?: string;
-  showArrow?: boolean;
+export type Props = LucideProps & {
+  lightColor?: string;
+  darkColor?: string;
+  name: React.ComponentType<LucideProps>;
+};
+
+export function Icon({
+  lightColor,
+  darkColor,
+  name: IconComponent,
+  color,
+  size = 24,
+  strokeWidth = 1.8,
+  ...rest
+}: Props) {
+  const themedColor = useColor("icon", { light: lightColor, dark: darkColor });
+
+  // Use provided color prop if available, otherwise use themed color
+  const iconColor = color || themedColor;
+
+  return (
+    <IconComponent
+      color={iconColor}
+      size={size}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      {...rest}
+    />
+  );
 }
-
-const SettingsItem = ({
-  icon,
-  title,
-  onPress,
-  textColor,
-  showArrow = true,
-}: SettingsItemProp) => {
-  const defaultTextColor = useColor("text");
-  const finalTextColor = textColor || defaultTextColor;
-
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.settingsItemContainer}>
-      <View style={styles.settingsItemLeft}>
-        {/* 2. Use custom Image component for icon */}
-        <Image source={icon} width={24} height={24} variant="default" />
-        <Text style={[styles.settingsItemText, { color: finalTextColor }]}>
-          {title}
-        </Text>
-      </View>
-
-      {/* 3. Use custom Image component for arrow */}
-      {showArrow && (
-        <Image
-          source={icons.rightArrow}
-          width={20}
-          height={20}
-          variant="default"
-        />
-      )}
-    </TouchableOpacity>
-  );
-};
-
-const Profile = () => {
-  const backgroundColor = useColor("background");
-  const textColor = useColor("text");
-  const borderColor = useColor("border");
-  const destructiveColor = useColor("destructive");
-
-  const handleLogout = async () => {
-    const result = await true;
-    if (result) {
-      showSuccessAlert("Success", "Logged out successfully");
-      // refetch();
-    } else {
-      showErrorAlert("Error", "Failed to logout");
-    }
-  };
-
-  const user = {
-    name: "John Doe",
-    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
-  };
-
-  return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: textColor }]}>
-            Profile
-          </Text>
-          <Image source={icons.bell} width={20} height={20} variant="default" />
-        </View>
-
-        <View style={styles.profileInfoContainer}>
-          <View style={styles.avatarContainer}>
-            <Image
-              source={{ uri: user?.avatar }}
-              width={176}
-              height={176}
-              variant="circle"
-            />
-            <TouchableOpacity style={styles.editButton}>
-              <Image
-                source={icons.edit}
-                width={36}
-                height={36}
-                variant="default"
-              />
-            </TouchableOpacity>
-
-            <Text style={[styles.userName, { color: textColor }]}>
-              {user?.name}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.settingsSection}>
-          <SettingsItem icon={icons.calendar} title="My Bookings" />
-          <SettingsItem icon={icons.wallet} title="Payments" />
-        </View>
-
-        <View
-          style={[styles.settingsSection, styles.borderTop, { borderColor }]}
-        >
-          {settings.slice(2).map((item, index) => (
-            <SettingsItem key={index} {...item} />
-          ))}
-        </View>
-
-        <View
-          style={[styles.settingsSection, styles.borderTop, { borderColor }]}
-        >
-          <SettingsItem
-            icon={icons.logout}
-            title="Logout"
-            textColor={destructiveColor}
-            showArrow={false}
-            onPress={handleLogout}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  scrollContainer: {
-    paddingBottom: 128,
-    paddingHorizontal: 28,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 20,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontFamily: "Rubik-Bold",
-  },
-  profileInfoContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-  avatarContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    position: "relative",
-    marginTop: 20,
-  },
-  editButton: {
-    position: "absolute",
-    bottom: 44,
-    right: 8,
-  },
-  userName: {
-    fontSize: 24,
-    fontFamily: "Rubik-Bold",
-    marginTop: 8,
-  },
-  settingsSection: {
-    flexDirection: "column",
-    marginTop: 40,
-  },
-  borderTop: {
-    borderTopWidth: 1,
-    paddingTop: 20,
-    marginTop: 20,
-  },
-  settingsItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 12,
-  },
-  settingsItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-  settingsItemText: {
-    fontSize: FONT_SIZE + 1, // 18
-    fontFamily: "Rubik-Medium",
-  },
-});
-
-export default Profile;

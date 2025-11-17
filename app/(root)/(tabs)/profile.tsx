@@ -1,58 +1,102 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
+import React from "react";
 import {
+  GestureResponderEvent,
   Image,
-  ImageSourcePropType,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-
-import icons from "@/constants/icons";
-
-import { showErrorAlert, showSuccessAlert } from "@/components/ui/alert";
-import { settings } from "@/constants/data";
-import { useColor } from "@/hooks/useColor";
-import { FONT_SIZE } from "@/theme/globals";
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { showErrorAlert, showSuccessAlert } from "@/components/ui/alert";
+import { settings as SETTINGS } from "@/constants/data";
+import { useColor } from "@/hooks/useColor";
+import { FONT_SIZE } from "@/theme/globals";
+
+/* Types */
+type IoniconName = keyof typeof Ionicons.glyphMap;
+
 interface SettingsItemProp {
-  icon: ImageSourcePropType;
+  icon: IoniconName;
   title: string;
-  onPress?: () => void;
+  onPress?: (e?: GestureResponderEvent) => void;
   textColor?: string;
   showArrow?: boolean;
 }
 
-const SettingsItem = ({
+/* SettingsItem */
+/* memoized for perf */
+const SettingsItem = React.memo(function SettingsItem({
   icon,
   title,
   onPress,
   textColor,
   showArrow = true,
-}: SettingsItemProp) => {
+}: SettingsItemProp) {
   const defaultTextColor = useColor("text");
   const finalTextColor = textColor || defaultTextColor;
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.settingsItemContainer}>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      style={styles.settingsItemContainer}
+    >
       <View style={styles.settingsItemLeft}>
-        <Image source={icon} style={styles.settingsItemIcon} />
+        <Ionicons name={icon} size={24} color={finalTextColor} />
         <Text style={[styles.settingsItemText, { color: finalTextColor }]}>
           {title}
         </Text>
       </View>
 
       {showArrow && (
-        <Image source={icons.rightArrow} style={styles.settingsArrowIcon} />
+        <Ionicons
+          name="chevron-forward-outline"
+          size={20}
+          color={finalTextColor}
+        />
       )}
     </TouchableOpacity>
   );
-};
+});
 
-const Profile = () => {
-  // const { user, refetch } = useGlobalContext();
+/* RoundIconButton */
+/* Reusable circular icon button used for edit camera */
+const RoundIconButton = ({
+  name,
+  size = 20,
+  bg,
+  fg,
+  onPress,
+  style,
+}: {
+  name: IoniconName;
+  size?: number;
+  bg?: string;
+  fg?: string;
+  onPress?: () => void;
+  style?: any;
+}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    activeOpacity={0.75}
+    style={[styles.roundButton, { backgroundColor: bg }, style]}
+    accessibilityRole="button"
+    accessibilityLabel="Edit avatar"
+  >
+    <Ionicons name={name} size={size} color={fg} />
+  </TouchableOpacity>
+);
+
+/* Profile Screen */
+const Profile: React.FC = () => {
+  const secondaryColor = useColor("secondary");
   const backgroundColor = useColor("background");
   const textColor = useColor("text");
   const borderColor = useColor("border");
@@ -62,11 +106,11 @@ const Profile = () => {
     const result = true;
     if (result) {
       showSuccessAlert("Success", "Logged out successfully");
-      // refetch();
     } else {
       showErrorAlert("Error", "Failed to logout");
     }
   };
+
   const user = {
     name: "John Doe",
     avatar: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -82,15 +126,35 @@ const Profile = () => {
           <Text style={[styles.headerTitle, { color: textColor }]}>
             Profile
           </Text>
-          <Image source={icons.bell} style={styles.headerIcon} />
+
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Notifications"
+            activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons
+              name="notifications-outline"
+              size={24}
+              color={textColor}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.profileInfoContainer}>
           <View style={styles.avatarContainer}>
             <Image source={{ uri: user?.avatar }} style={styles.avatar} />
-            <TouchableOpacity style={styles.editButton}>
-              <Image source={icons.edit} style={styles.editIcon} />
-            </TouchableOpacity>
+
+            <RoundIconButton
+              name="camera-outline"
+              size={18}
+              bg={secondaryColor}
+              fg={textColor}
+              style={styles.editButtonPosition}
+              onPress={() => {
+                /* open edit avatar action */
+              }}
+            />
 
             <Text style={[styles.userName, { color: textColor }]}>
               {user?.name}
@@ -99,15 +163,19 @@ const Profile = () => {
         </View>
 
         <View style={styles.settingsSection}>
-          <SettingsItem icon={icons.calendar} title="My Bookings" />
-          <SettingsItem icon={icons.wallet} title="Payments" />
+          <SettingsItem icon="calendar-outline" title="My Bookings" />
+          <SettingsItem icon="wallet-outline" title="Payments" />
         </View>
 
         <View
           style={[styles.settingsSection, styles.borderTop, { borderColor }]}
         >
-          {settings.slice(2).map((item, index) => (
-            <SettingsItem key={index} {...item} />
+          {SETTINGS.slice(2).map((item) => (
+            <SettingsItem
+              key={item.title}
+              icon={item.icon as IoniconName}
+              title={item.title}
+            />
           ))}
         </View>
 
@@ -115,7 +183,7 @@ const Profile = () => {
           style={[styles.settingsSection, styles.borderTop, { borderColor }]}
         >
           <SettingsItem
-            icon={icons.logout}
+            icon="log-out-outline"
             title="Logout"
             textColor={destructiveColor}
             showArrow={false}
@@ -127,6 +195,8 @@ const Profile = () => {
   );
 };
 
+export default Profile;
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -135,6 +205,7 @@ const styles = StyleSheet.create({
     paddingBottom: 128,
     paddingHorizontal: 28,
   },
+
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -145,10 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Rubik-Bold",
   },
-  headerIcon: {
-    width: 20,
-    height: 20,
-  },
+
   profileInfoContainer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -166,20 +234,31 @@ const styles = StyleSheet.create({
     borderRadius: 88,
     position: "relative",
   },
-  editButton: {
+
+  /* Round icon button */
+  roundButton: {
+    padding: 10,
+    borderRadius: 999,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.18,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  editButtonPosition: {
     position: "absolute",
     bottom: 44,
     right: 8,
   },
-  editIcon: {
-    width: 36,
-    height: 36,
-  },
+
   userName: {
     fontSize: 24,
     fontFamily: "Rubik-Bold",
     marginTop: 8,
   },
+
   settingsSection: {
     flexDirection: "column",
     marginTop: 40,
@@ -189,6 +268,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     marginTop: 20,
   },
+
   settingsItemContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -200,18 +280,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  settingsItemIcon: {
-    width: 24,
-    height: 24,
-  },
   settingsItemText: {
     fontSize: FONT_SIZE + 1,
     fontFamily: "Rubik-Medium",
   },
-  settingsArrowIcon: {
-    width: 20,
-    height: 20,
-  },
 });
-
-export default Profile;
