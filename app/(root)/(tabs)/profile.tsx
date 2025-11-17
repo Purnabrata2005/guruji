@@ -46,8 +46,7 @@ const SettingsItem = React.memo(function SettingsItem({
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       accessibilityRole="button"
       accessibilityLabel={title}
-      style={styles.settingsItemContainer}
-    >
+      style={styles.settingsItemContainer}>
       <View style={styles.settingsItemLeft}>
         <Ionicons name={icon} size={24} color={finalTextColor} />
         <Text style={[styles.settingsItemText, { color: finalTextColor }]}>
@@ -88,8 +87,7 @@ const RoundIconButton = ({
     activeOpacity={0.75}
     style={[styles.roundButton, { backgroundColor: bg }, style]}
     accessibilityRole="button"
-    accessibilityLabel="Edit avatar"
-  >
+    accessibilityLabel="Edit avatar">
     <Ionicons name={name} size={size} color={fg} />
   </TouchableOpacity>
 );
@@ -120,8 +118,7 @@ const Profile: React.FC = () => {
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
+        contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
           <Text style={[styles.headerTitle, { color: textColor }]}>
             Profile
@@ -131,8 +128,7 @@ const Profile: React.FC = () => {
             accessibilityRole="button"
             accessibilityLabel="Notifications"
             activeOpacity={0.7}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
             <Ionicons
               name="notifications-outline"
               size={24}
@@ -168,9 +164,8 @@ const Profile: React.FC = () => {
         </View>
 
         <View
-          style={[styles.settingsSection, styles.borderTop, { borderColor }]}
-        >
-          {SETTINGS.slice(2).map((item) => (
+          style={[styles.settingsSection, styles.borderTop, { borderColor }]}>
+          {SETTINGS.slice(2).map(item => (
             <SettingsItem
               key={item.title}
               icon={item.icon as IoniconName}
@@ -180,8 +175,7 @@ const Profile: React.FC = () => {
         </View>
 
         <View
-          style={[styles.settingsSection, styles.borderTop, { borderColor }]}
-        >
+          style={[styles.settingsSection, styles.borderTop, { borderColor }]}>
           <SettingsItem
             icon="log-out-outline"
             title="Logout"

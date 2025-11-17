@@ -65,8 +65,7 @@ const Auth = () => {
             style={[
               styles.googleButton,
               { backgroundColor: buttonBgColor, shadowColor },
-            ]}
-          >
+            ]}>
             <View style={styles.googleButtonInner}>
               <Image
                 source={icons.google}
@@ -74,8 +73,7 @@ const Auth = () => {
                 resizeMode="contain"
               />
               <Text
-                style={[styles.googleButtonText, { color: buttonTextColor }]}
-              >
+                style={[styles.googleButtonText, { color: buttonTextColor }]}>
                 Continue with Google
               </Text>
             </View>

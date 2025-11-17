@@ -10,7 +10,7 @@ import { Platform } from "react-native";
 const TabsLayout = () => {
   return (
     <NativeTabs
-      backgroundColor="#F8F9FA"
+      backgroundColor="#fefefe"
       tintColor="#e4e3e1"
       iconColor={{
         default: "#5F6368",
@@ -33,8 +33,7 @@ const TabsLayout = () => {
       indicatorColor="#e4e3e1" // Blue indicator (Android only)
       minimizeBehavior="onScrollDown"
       shadowColor="#000000"
-      disableTransparentOnScrollEdge={true}
-    >
+      disableTransparentOnScrollEdge={true}>
       <NativeTabs.Trigger name="index">
         <Label>Home</Label>
         {Platform.select({

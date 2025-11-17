@@ -1,7 +1,4 @@
 const lightColors = {
-  // --- ADDED FOR NEW BUTTON ---
-  backgroundHighlightColor: "#007AFF", // Mapped to 'blue'
-  textHighlightColor: "#FFFFFF",
   // Base colors
   background: "#FFFFFF",
   foreground: "#000000",
@@ -78,9 +75,6 @@ const lightColors = {
 };
 
 const darkColors = {
-  // --- ADDED FOR NEW BUTTON ---
-  backgroundHighlightColor: "#0A84FF", // Mapped to 'blue'
-  textHighlightColor: "#FFFFFF",
   // Base colors
   background: "#000000",
   foreground: "#FFFFFF",
