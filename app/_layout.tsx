@@ -24,7 +24,23 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack screenOptions={{ headerShown: false }} />
+      <AppNavigator />
     </GestureHandlerRootView>
+  );
+}
+
+function AppNavigator() {
+  const isAuthenticated = true;
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      {/* Public auth screens */}
+      <Stack.Screen name="(auth)" />
+
+      {/* Protected groups */}
+      <Stack.Protected guard={isAuthenticated}>
+        <Stack.Screen name="(root)" />
+      </Stack.Protected>
+    </Stack>
   );
 }

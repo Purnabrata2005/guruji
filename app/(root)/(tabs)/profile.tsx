@@ -1,6 +1,6 @@
 import {
-  // Image, // Removed from react-native
-  // ImageSourcePropType, // 1. Removed this
+  Image,
+  ImageSourcePropType,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,20 +8,17 @@ import {
   View,
 } from "react-native";
 
-// 2. Import ImageSource from expo-image
-import { Image } from "@/components/ui/image";
-import { ImageSource } from "expo-image";
+import icons from "@/constants/icons";
 
 import { showErrorAlert, showSuccessAlert } from "@/components/ui/alert";
 import { settings } from "@/constants/data";
-import icons from "@/constants/icons";
 import { useColor } from "@/hooks/useColor";
 import { FONT_SIZE } from "@/theme/globals";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface SettingsItemProp {
-  icon: ImageSource; // 3. Changed type to ImageSource
+  icon: ImageSourcePropType;
   title: string;
   onPress?: () => void;
   textColor?: string;
@@ -41,34 +38,28 @@ const SettingsItem = ({
   return (
     <TouchableOpacity onPress={onPress} style={styles.settingsItemContainer}>
       <View style={styles.settingsItemLeft}>
-        {/* 2. Use custom Image component for icon */}
-        <Image source={icon} width={24} height={24} variant="default" />
+        <Image source={icon} style={styles.settingsItemIcon} />
         <Text style={[styles.settingsItemText, { color: finalTextColor }]}>
           {title}
         </Text>
       </View>
 
-      {/* 3. Use custom Image component for arrow */}
       {showArrow && (
-        <Image
-          source={icons.rightArrow}
-          width={20}
-          height={20}
-          variant="default"
-        />
+        <Image source={icons.rightArrow} style={styles.settingsArrowIcon} />
       )}
     </TouchableOpacity>
   );
 };
 
 const Profile = () => {
+  // const { user, refetch } = useGlobalContext();
   const backgroundColor = useColor("background");
   const textColor = useColor("text");
   const borderColor = useColor("border");
   const destructiveColor = useColor("destructive");
 
   const handleLogout = async () => {
-    const result = await true;
+    const result = true;
     if (result) {
       showSuccessAlert("Success", "Logged out successfully");
       // refetch();
@@ -76,7 +67,6 @@ const Profile = () => {
       showErrorAlert("Error", "Failed to logout");
     }
   };
-
   const user = {
     name: "John Doe",
     avatar: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -92,24 +82,14 @@ const Profile = () => {
           <Text style={[styles.headerTitle, { color: textColor }]}>
             Profile
           </Text>
-          <Image source={icons.bell} width={20} height={20} variant="default" />
+          <Image source={icons.bell} style={styles.headerIcon} />
         </View>
 
         <View style={styles.profileInfoContainer}>
           <View style={styles.avatarContainer}>
-            <Image
-              source={{ uri: user?.avatar }}
-              width={176}
-              height={176}
-              variant="circle"
-            />
+            <Image source={{ uri: user?.avatar }} style={styles.avatar} />
             <TouchableOpacity style={styles.editButton}>
-              <Image
-                source={icons.edit}
-                width={36}
-                height={36}
-                variant="default"
-              />
+              <Image source={icons.edit} style={styles.editIcon} />
             </TouchableOpacity>
 
             <Text style={[styles.userName, { color: textColor }]}>
@@ -165,6 +145,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Rubik-Bold",
   },
+  headerIcon: {
+    width: 20,
+    height: 20,
+  },
   profileInfoContainer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -176,10 +160,20 @@ const styles = StyleSheet.create({
     position: "relative",
     marginTop: 20,
   },
+  avatar: {
+    width: 176,
+    height: 176,
+    borderRadius: 88,
+    position: "relative",
+  },
   editButton: {
     position: "absolute",
     bottom: 44,
     right: 8,
+  },
+  editIcon: {
+    width: 36,
+    height: 36,
   },
   userName: {
     fontSize: 24,
@@ -206,9 +200,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
+  settingsItemIcon: {
+    width: 24,
+    height: 24,
+  },
   settingsItemText: {
-    fontSize: FONT_SIZE + 1, // 18
+    fontSize: FONT_SIZE + 1,
     fontFamily: "Rubik-Medium",
+  },
+  settingsArrowIcon: {
+    width: 20,
+    height: 20,
   },
 });
 

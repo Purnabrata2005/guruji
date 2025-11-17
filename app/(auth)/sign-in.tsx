@@ -3,6 +3,7 @@ import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { useColor } from "@/hooks/useColor";
 import { FONT_SIZE } from "@/theme/globals";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -15,6 +16,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Auth = () => {
+  const router = useRouter();
   const backgroundColor = useColor("background");
   const textMuted = useColor("textMuted");
   const textColor = useColor("text");
@@ -26,6 +28,7 @@ const Auth = () => {
   const handleLogin = async () => {
     const result = true;
     if (result) {
+      router.navigate("/(root)/(tabs)");
       showSuccessAlert("Success", "Logged in successfully");
     } else {
       showErrorAlert("Error", "Failed to login");
