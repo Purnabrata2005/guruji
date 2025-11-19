@@ -1,15 +1,26 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Star, Trophy } from "lucide-react-native";
+import React, { useState } from "react";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import JourneyCard from "@/components/JourneyCard";
+// import { FeaturedTestCard, ChallengeCard } from "@/components/TestCard";
+import ChallengeCard from "@/components/ChallengeCard";
+import { FeaturedTestCard } from "@/components/TestCard";
 import { Card } from "@/components/ui/card";
+import { Icon } from "@/components/ui/icon";
 import { Image } from "@/components/ui/image";
 import { Text as NText } from "@/components/ui/text";
-import icons from "@/constants/icons";
+import { JOURNEY_ITEMS } from "@/constants/data";
 import { useColor } from "@/hooks/useColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-// Define the Test interface
 interface Test {
   id: string;
   title: string;
@@ -23,21 +34,22 @@ interface Test {
 }
 
 const HomeScreen = () => {
-  // Use Global Context instead of hardcoded profile
   const profile = {
-    name: "John Doe",
+    name: "Nandan Manna",
     avatar: "https://randomuser.me/api/portraits/men/1.jpg",
   };
+  const [refreshing, setRefreshing] = useState(false);
 
-  // Get colors from your hook
+  // --- Colors ---
   const backgroundColor = useColor("background");
-  const secondaryColor = useColor("secondary");
+  const cardColor = useColor("card");
   const textColorMuted = useColor("textMuted");
   const textColor = useColor("text");
   const yellowColor = useColor("yellow");
   const greenColor = useColor("green");
+  const primaryColor = useColor("primary");
+  const borderColor = useColor("border");
 
-  // Mock data for the tests
   const tests: Test[] = [
     {
       id: "1",
@@ -72,103 +84,221 @@ const HomeScreen = () => {
       created_at: "2025-01-08",
     },
   ];
+  // src/constants/challengesData.ts
+  interface Challenge {
+    id: string;
+    number: number;
+    title: string;
+    badge: keyof typeof Ionicons.glyphMap | null;
+    isActive: boolean;
+    endDate: string;
+  }
+  // Add this inside the HomeScreen component (or import it if saved externally)
+  const challenges: Challenge[] = [
+    {
+      id: "1",
+      number: 1,
+      title: "35 Days React Spark",
+      badge: "flash",
+      isActive: true,
+      endDate: "Ends Nov 21",
+    },
+    {
+      id: "2",
+      number: 2,
+      title: "25 Days JS Challenge : Part 2",
+      badge: "flash",
+      isActive: true,
+      endDate: "Ends Nov 30",
+    },
+    {
+      id: "3",
+      number: 3,
+      title: "Web Dev: Bunny",
+      badge: null,
+      isActive: true,
+      endDate: "Ends Dec 9",
+    },
+  ];
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
+  // --- List Footer Component (The Continue Your Journey Section) ---
+  const ListFooter = () => (
+    <View style={styles.headerPadding}>
+      <View style={styles.sectionContainer}>
+        <NText
+          style={[styles.sectionTitle, { color: textColor, marginBottom: 12 }]}>
+          Continue your journey
+        </NText>
+
+        {JOURNEY_ITEMS.map(item => (
+          <JourneyCard
+            key={item.id}
+            item={item}
+            onPress={() => console.log("Navigating to:", item.title)}
+          />
+        ))}
+      </View>
+    </View>
+  );
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      {/* Header */}
-      <View style={[styles.headerContainer, { backgroundColor }]}>
-        <View style={styles.headerRow}>
-          <View style={styles.profileRow}>
-            <Image
-              source={{
-                uri: profile?.avatar,
-              }}
-              width={48}
-              height={48}
-              variant="circle"
-            />
-            <View style={styles.greetingContainer}>
-              <NText style={[styles.greetingText, { color: textColorMuted }]}>
-                Good Morning
-              </NText>
-              <NText style={[styles.profileName, { color: textColor }]}>
-                {profile?.name}
-              </NText>
+      <FlatList
+        data={challenges}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.testCardContainer}>
+            <ChallengeCard challenge={item} onPress={() => {}} />
+          </View>
+        )}
+        contentContainerStyle={styles.flatListContent}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={textColor}
+          />
+        }
+        // --- CONTENT BEFORE THE MAIN LIST ---
+        ListHeaderComponent={
+          <View>
+            {/* 1. TOP BAR */}
+            <View
+              style={[
+                styles.topBar,
+                { borderColor: borderColor, backgroundColor: backgroundColor },
+              ]}>
+              <View style={styles.textContainer}>
+                <NText style={[styles.greetingText, { color: textColor }]}>
+                  Good evening!
+                </NText>
+                <NText
+                  style={[styles.subGreetingText, { color: textColorMuted }]}>
+                  Ready to code?
+                </NText>
+              </View>
+
+              <View style={[styles.profileRing, { borderColor: borderColor }]}>
+                <Image
+                  source={{ uri: profile.avatar }}
+                  width={40}
+                  height={40}
+                  style={{ borderRadius: 20 }}
+                />
+              </View>
+            </View>
+
+            <View style={styles.headerPadding}>
+              {/* 2. PROGRESS SECTION */}
+              <View style={styles.sectionContainer}>
+                <NText
+                  variant="title"
+                  style={[styles.sectionTitle, { color: textColor }]}>
+                  Your Progress
+                </NText>
+
+                <View style={styles.cardsContainer}>
+                  {/* Total XP Card */}
+                  <Card
+                    style={{
+                      ...styles.cardStyle,
+                      backgroundColor: cardColor,
+                      borderColor: borderColor,
+                    }}>
+                    <View style={styles.cardHeader}>
+                      <NText
+                        variant="caption"
+                        style={[styles.cardLabel, { color: textColorMuted }]}>
+                        Total XP
+                      </NText>
+                      <Icon name={Star} color={yellowColor} size={20} />
+                    </View>
+                    <NText style={[styles.cardValue, { color: textColor }]}>
+                      0
+                    </NText>
+                  </Card>
+
+                  {/* Live Challenges Card */}
+                  <Card
+                    style={{
+                      ...styles.cardStyle,
+                      backgroundColor: cardColor,
+                      borderColor: borderColor,
+                    }}>
+                    <View style={styles.cardHeader}>
+                      <NText
+                        variant="caption"
+                        style={[styles.cardLabel, { color: textColorMuted }]}>
+                        Live Challenges
+                      </NText>
+                      <Icon name={Trophy} color={greenColor} size={20} />
+                    </View>
+                    <NText style={[styles.cardValue, { color: textColor }]}>
+                      4
+                    </NText>
+                  </Card>
+                </View>
+              </View>
+
+              {/* 3. FEATURED SECTION */}
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionHeader}>
+                  <NText
+                    variant="title"
+                    style={[styles.sectionTitle, { color: textColor }]}>
+                    Featured Tests
+                  </NText>
+                  <TouchableOpacity>
+                    <NText style={[styles.seeAllText, { color: primaryColor }]}>
+                      See all
+                    </NText>
+                  </TouchableOpacity>
+                </View>
+
+                <FlatList
+                  data={tests}
+                  renderItem={({ item }) => (
+                    <FeaturedTestCard
+                      item={item}
+                      onPress={() => console.log("Featured pressed")}
+                    />
+                  )}
+                  keyExtractor={item => item.id}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalListContent}
+                />
+              </View>
+
+              {/* 4. OUR RECOMMENDATION TITLE (LAST ELEMENT BEFORE THE LIST ITEMS START) */}
+              <View style={[styles.sectionContainer, { marginBottom: 12 }]}>
+                <View style={styles.sectionHeader}>
+                  <NText
+                    variant="title"
+                    style={[styles.sectionTitle, { color: textColor }]}>
+                    Our Recommendation
+                  </NText>
+                  <TouchableOpacity>
+                    <NText style={[styles.seeAllText, { color: primaryColor }]}>
+                      See all
+                    </NText>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
-          <Image source={icons.bell} width={24} height={24} variant="default" />
-        </View>
-      </View>
-
-      {/* Progress Section */}
-      <View style={styles.progressContentContainer}>
-        <NText
-          variant="title"
-          style={[styles.progressTitle, { color: textColor }]}>
-          Your progress
-        </NText>
-
-        <View style={styles.cardsContainer}>
-          <Card style={styles.cardStyle}>
-            <View style={styles.cardHeader}>
-              <NText
-                variant="caption"
-                style={[styles.cardLabel, { color: textColorMuted }]}>
-                Total XP
-              </NText>
-              <Ionicons name="star" size={20} color={yellowColor} />
-            </View>
-            <NText style={[styles.cardValue, { color: textColor }]}>0</NText>
-          </Card>
-
-          <Card style={styles.cardStyle}>
-            <View style={styles.cardHeader}>
-              <NText
-                variant="caption"
-                style={[styles.cardLabel, { color: textColorMuted }]}>
-                Live Challenges
-              </NText>
-              <Ionicons name="trophy" size={20} color={greenColor} />
-            </View>
-            <NText style={[styles.cardValue, { color: textColor }]}>4</NText>
-          </Card>
-        </View>
-      </View>
-
-      {/* Tests Section */}
-      {/* <ScrollView
-        style={[
-          styles.testsScrollContainer,
-          { backgroundColor: secondaryColor },
-        ]}>
-        <NText style={[styles.sectionTitle, { color: textColor }]}>
-          Featured Tests
-        </NText>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.horizontalScrollContainer}>
-          {tests.map(item => (
-            <View key={item.id} style={styles.horizontalScrollItem}>
-              <FeaturedTestCard
-                item={item}
-                onPress={() => console.log("Featured Test Card Pressed")}
-              />
-            </View>
-          ))}
-        </ScrollView>
-
-        <NText style={[styles.allTestsTitle, { color: textColor }]}>
-          All Tests
-        </NText>
-
-        <View style={styles.allTestsContainer}>
-          {tests.map(item => (
-            <TestCard key={item.id} item={item} />
-          ))}
-        </View>
-      </ScrollView> */}
+        }
+        // --- CONTENT AFTER THE MAIN LIST ---
+        ListFooterComponent={ListFooter}
+      />
     </SafeAreaView>
   );
 };
@@ -177,55 +307,50 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  headerContainer: {
-    paddingHorizontal: 14,
-    paddingTop: 16, // Match the original "mt-5"
-    paddingBottom: 12, // Add some padding
-    borderBottomWidth: 1.5,
-    borderBottomColor: "#E5E7EB",
+  flatListContent: {
+    paddingBottom: 100,
   },
-  headerRow: {
+  // --- Top Bar Styles ---
+  topBar: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-  },
-  profileRow: {
-    flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 14,
+    paddingTop: 12,
+    borderBottomWidth: 1,
+    marginBottom: 20,
   },
-  greetingContainer: {
+  textContainer: {
     flexDirection: "column",
-    alignItems: "flex-start",
-    marginLeft: 8,
-    justifyContent: "center",
   },
   greetingText: {
-    fontSize: 12,
-    fontFamily: "Rubik-Regular",
+    fontSize: 24,
+    fontWeight: "900",
   },
-  profileName: {
-    fontSize: 16,
-    fontFamily: "Rubik-Medium",
+  subGreetingText: {
+    fontSize: 14,
+    fontWeight: "600",
   },
-  progressScrollContainer: {
-    flex: 1,
+  profileRing: {
+    padding: 2,
+    borderWidth: 1,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  progressContentContainer: {
-    paddingHorizontal: 14,
-    paddingTop: 6,
-  },
-  progressTitle: {
-    fontFamily: "Rubik-Bold",
-    marginBottom: 8,
-  },
+
+  // --- Progress Cards (Bottles) ---
   cardsContainer: {
     flexDirection: "row",
     gap: 12,
+    marginTop: 12,
   },
   cardStyle: {
     flex: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    borderWidth: 1,
+    elevation: 0,
+    shadowOpacity: 0,
     justifyContent: "space-between",
   },
   cardHeader: {
@@ -234,39 +359,43 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   cardLabel: {
-    fontSize: 14,
-    fontFamily: "Rubik-Regular",
+    fontSize: 12,
+    fontWeight: "bold",
   },
   cardValue: {
-    fontSize: 20,
-    fontFamily: "Rubik-Bold",
-    marginTop: 8,
+    fontSize: 24,
+    marginTop: 4,
+    fontWeight: "bold",
   },
-  testsScrollContainer: {
-    flex: 1,
+
+  // --- Sections & Lists ---
+  headerPadding: {
+    paddingHorizontal: 14,
+  },
+  sectionContainer: {
+    marginBottom: 20,
+    marginTop: 0,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 22,
-    fontFamily: "Rubik-ExtraBold",
-    marginTop: 20,
-    marginLeft: 16,
+    fontSize: 18,
+    marginLeft: 10,
+    fontWeight: "bold",
   },
-  horizontalScrollContainer: {
-    marginTop: 16,
-    paddingLeft: 16,
+  seeAllText: {
+    fontSize: 14,
+    fontWeight: "600",
   },
-  horizontalScrollItem: {
-    marginRight: 16,
+  horizontalListContent: {
+    gap: 16,
   },
-  allTestsTitle: {
-    fontSize: 22,
-    fontFamily: "Rubik-ExtraBold",
-    marginTop: 32,
-    marginLeft: 16,
-  },
-  allTestsContainer: {
-    paddingHorizontal: 16,
-    marginBottom: 40,
+  testCardContainer: {
+    paddingHorizontal: 14,
   },
 });
 

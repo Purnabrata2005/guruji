@@ -1,11 +1,11 @@
-import { Icon } from '@/components/ui/icon';
-import { ButtonSpinner, SpinnerVariant } from '@/components/ui/spinner';
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
-import * as Haptics from 'expo-haptics';
-import { LucideProps } from 'lucide-react-native';
-import { forwardRef } from 'react';
+import { Icon } from "@/components/ui/icon";
+import { ButtonSpinner, SpinnerVariant } from "@/components/ui/spinner";
+import { Text } from "@/components/ui/text";
+import { useColor } from "@/hooks/useColor";
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from "@/theme/globals";
+import * as Haptics from "expo-haptics";
+import { LucideProps } from "lucide-react-native";
+import { forwardRef } from "react";
 import {
   Pressable,
   TextStyle,
@@ -13,25 +13,25 @@ import {
   TouchableOpacityProps,
   View,
   ViewStyle,
-} from 'react-native';
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
 export type ButtonVariant =
-  | 'default'
-  | 'destructive'
-  | 'success'
-  | 'outline'
-  | 'secondary'
-  | 'ghost'
-  | 'link';
+  | "default"
+  | "destructive"
+  | "success"
+  | "outline"
+  | "secondary"
+  | "ghost"
+  | "link";
 
-export type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
+export type ButtonSize = "default" | "sm" | "lg" | "icon";
 
-export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
+export interface ButtonProps extends Omit<TouchableOpacityProps, "style"> {
   label?: string;
   children?: React.ReactNode;
   animation?: boolean;
@@ -53,27 +53,28 @@ export const Button = forwardRef<View, ButtonProps>(
       children,
       icon,
       onPress,
-      variant = 'default',
-      size = 'default',
+      variant = "default",
+      size = "default",
       disabled = false,
       loading = false,
       animation = true,
       haptic = true,
-      loadingVariant = 'default',
+      loadingVariant = "default",
       style,
       textStyle,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const primaryColor = useColor('primary');
-    const primaryForegroundColor = useColor('primaryForeground');
-    const secondaryColor = useColor('secondary');
-    const secondaryForegroundColor = useColor('secondaryForeground');
-    const destructiveColor = useColor('red');
-    const destructiveForegroundColor = useColor('destructiveForeground');
-    const greenColor = useColor('green');
-    const borderColor = useColor('border');
+    const primaryColor = useColor("primary");
+    const primaryForegroundColor = useColor("primaryForeground");
+    const secondaryColor = useColor("secondary");
+    const secondaryForegroundColor = useColor("secondaryForeground");
+    const destructiveColor = useColor("red");
+    const destructiveForegroundColor = useColor("destructiveForeground");
+    const greenColor = useColor("green");
+    const borderColor = useColor("border");
+    const foregroundColor = useColor("foreground");
 
     // Animation values for liquid glass effect
     const scale = useSharedValue(1);
@@ -81,21 +82,21 @@ export const Button = forwardRef<View, ButtonProps>(
 
     const getButtonStyle = (): ViewStyle => {
       const baseStyle: ViewStyle = {
-        borderRadius: CORNERS,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+        borderRadius: BORDER_RADIUS,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
       };
 
       // Size variants
       switch (size) {
-        case 'sm':
-          Object.assign(baseStyle, { height: 44, paddingHorizontal: 24 });
+        case "sm":
+          Object.assign(baseStyle, { height: 34, paddingHorizontal: 14 });
           break;
-        case 'lg':
-          Object.assign(baseStyle, { height: 54, paddingHorizontal: 36 });
+        case "lg":
+          Object.assign(baseStyle, { height: 44, paddingHorizontal: 26 });
           break;
-        case 'icon':
+        case "icon":
           Object.assign(baseStyle, {
             height: HEIGHT,
             width: HEIGHT,
@@ -103,31 +104,36 @@ export const Button = forwardRef<View, ButtonProps>(
           });
           break;
         default:
-          Object.assign(baseStyle, { height: HEIGHT, paddingHorizontal: 32 });
+          Object.assign(baseStyle, { height: HEIGHT, paddingHorizontal: 22 });
       }
 
       // Variant styles
       switch (variant) {
-        case 'destructive':
+        case "destructive":
           return { ...baseStyle, backgroundColor: destructiveColor };
-        case 'success':
+        case "success":
           return { ...baseStyle, backgroundColor: greenColor };
-        case 'outline':
+        case "outline":
           return {
             ...baseStyle,
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
             borderWidth: 1,
             borderColor,
+            shadowColor: foregroundColor,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.02,
+            shadowRadius: 10,
+            elevation: 0,
           };
-        case 'secondary':
+        case "secondary":
           return { ...baseStyle, backgroundColor: secondaryColor };
-        case 'ghost':
-          return { ...baseStyle, backgroundColor: 'transparent' };
-        case 'link':
+        case "ghost":
+          return { ...baseStyle, backgroundColor: "transparent" };
+        case "link":
           return {
             ...baseStyle,
-            backgroundColor: 'transparent',
-            height: 'auto',
+            backgroundColor: "transparent",
+            height: "auto",
             paddingHorizontal: 0,
           };
         default:
@@ -138,25 +144,25 @@ export const Button = forwardRef<View, ButtonProps>(
     const getButtonTextStyle = (): TextStyle => {
       const baseTextStyle: TextStyle = {
         fontSize: FONT_SIZE,
-        fontWeight: '500',
+        fontWeight: "500",
       };
 
       switch (variant) {
-        case 'destructive':
+        case "destructive":
           return { ...baseTextStyle, color: destructiveForegroundColor };
-        case 'success':
+        case "success":
           return { ...baseTextStyle, color: destructiveForegroundColor };
-        case 'outline':
+        case "outline":
           return { ...baseTextStyle, color: primaryColor };
-        case 'secondary':
+        case "secondary":
           return { ...baseTextStyle, color: secondaryForegroundColor };
-        case 'ghost':
+        case "ghost":
           return { ...baseTextStyle, color: primaryColor };
-        case 'link':
+        case "link":
           return {
             ...baseTextStyle,
             color: primaryColor,
-            textDecorationLine: 'underline',
+            textDecorationLine: "underline",
           };
         default:
           return { ...baseTextStyle, color: primaryForegroundColor };
@@ -165,17 +171,17 @@ export const Button = forwardRef<View, ButtonProps>(
 
     const getColor = (): string => {
       switch (variant) {
-        case 'destructive':
+        case "destructive":
           return destructiveForegroundColor;
-        case 'success':
+        case "success":
           return destructiveForegroundColor;
-        case 'outline':
+        case "outline":
           return primaryColor;
-        case 'secondary':
+        case "secondary":
           return secondaryForegroundColor;
-        case 'ghost':
+        case "ghost":
           return primaryColor;
-        case 'link':
+        case "link":
           return primaryColor;
         default:
           return primaryForegroundColor;
@@ -185,11 +191,11 @@ export const Button = forwardRef<View, ButtonProps>(
     // Helper function to get icon size based on button size
     const getIconSize = (): number => {
       switch (size) {
-        case 'sm':
+        case "sm":
           return 16;
-        case 'lg':
+        case "lg":
           return 24;
-        case 'icon':
+        case "icon":
           return 20;
         default:
           return 18;
@@ -199,7 +205,7 @@ export const Button = forwardRef<View, ButtonProps>(
     // Trigger haptic feedback
     const triggerHapticFeedback = () => {
       if (haptic && !disabled && !loading) {
-        if (process.env.EXPO_OS === 'ios') {
+        if (process.env.EXPO_OS === "ios") {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }
       }
@@ -207,7 +213,7 @@ export const Button = forwardRef<View, ButtonProps>(
 
     // Improved animation handlers for liquid glass effect
     const handlePressIn = (ev?: any) => {
-      'worklet';
+      "worklet";
       // Trigger haptic feedback
       triggerHapticFeedback();
 
@@ -229,7 +235,7 @@ export const Button = forwardRef<View, ButtonProps>(
     };
 
     const handlePressOut = (ev?: any) => {
-      'worklet';
+      "worklet";
       // Return to original size with smooth spring
       scale.value = withSpring(1, {
         damping: 20,
@@ -278,7 +284,7 @@ export const Button = forwardRef<View, ButtonProps>(
       // Find the last occurrence of flex (in case of multiple styles with flex)
       for (let i = styleArray.length - 1; i >= 0; i--) {
         const s = styleArray[i];
-        if (s && typeof s === 'object' && 'flex' in s) {
+        if (s && typeof s === "object" && "flex" in s) {
           return s.flex;
         }
       }
@@ -292,14 +298,14 @@ export const Button = forwardRef<View, ButtonProps>(
       return flexValue === 1
         ? {
             flex: 1,
-            alignSelf: 'stretch',
+            alignSelf: "stretch",
           }
         : flexValue !== null
-        ? {
-            flex: flexValue,
-            maxHeight: size === 'sm' ? 44 : size === 'lg' ? 54 : HEIGHT,
-          }
-        : {};
+          ? {
+              flex: flexValue,
+              maxHeight: size === "sm" ? 44 : size === "lg" ? 54 : HEIGHT,
+            }
+          : {};
     };
 
     // Updated getStyleWithoutFlex function
@@ -307,8 +313,8 @@ export const Button = forwardRef<View, ButtonProps>(
       if (!style) return style;
 
       const styleArray = Array.isArray(style) ? style : [style];
-      return styleArray.map((s) => {
-        if (s && typeof s === 'object' && 'flex' in s) {
+      return styleArray.map(s => {
+        if (s && typeof s === "object" && "flex" in s) {
           const { flex, ...restStyle } = s;
           return restStyle;
         }
@@ -330,8 +336,7 @@ export const Button = forwardRef<View, ButtonProps>(
         onPressOut={handlePressOut}
         disabled={disabled || loading}
         style={getPressableStyle()}
-        {...props}
-      >
+        {...props}>
         <Animated.View style={[animatedStyle, buttonStyle, styleWithoutFlex]}>
           {loading ? (
             <ButtonSpinner
@@ -339,10 +344,9 @@ export const Button = forwardRef<View, ButtonProps>(
               variant={loadingVariant}
               color={contentColor}
             />
-          ) : typeof children === 'string' ? (
+          ) : typeof children === "string" ? (
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
-            >
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
               {icon && (
                 <Icon name={icon} color={contentColor} size={iconSize} />
               )}
@@ -350,8 +354,7 @@ export const Button = forwardRef<View, ButtonProps>(
             </View>
           ) : (
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
-            >
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
               {icon && (
                 <Icon name={icon} color={contentColor} size={iconSize} />
               )}
@@ -367,16 +370,15 @@ export const Button = forwardRef<View, ButtonProps>(
         onPress={handleTouchablePress}
         disabled={disabled || loading}
         activeOpacity={0.8}
-        {...props}
-      >
+        {...props}>
         {loading ? (
           <ButtonSpinner
             size={size}
             variant={loadingVariant}
             color={contentColor}
           />
-        ) : typeof children === 'string' ? (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        ) : typeof children === "string" ? (
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             {icon && <Icon name={icon} color={contentColor} size={iconSize} />}
             <Text style={[finalTextStyle, textStyle]}>{children}</Text>
           </View>
@@ -385,8 +387,8 @@ export const Button = forwardRef<View, ButtonProps>(
         )}
       </TouchableOpacity>
     );
-  }
+  },
 );
 
 // Add display name for better debugging
-Button.displayName = 'Button';
+Button.displayName = "Button";

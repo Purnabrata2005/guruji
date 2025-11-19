@@ -1,79 +1,151 @@
+// const lightColors = {
+//   // Base colors
+//   background: "#FFFFFF",
+//   foreground: "#000000",
+
+//   // Card colors
+//   card: "#f8fafb",
+//   cardForeground: "#000000",
+
+//   // Popover colors
+//   popover: "#F2F2F7",
+//   popoverForeground: "#000000",
+
+//   // Primary colors
+//   primary: "#18181b",
+
+//   primaryForeground: "#FFFFFF",
+
+//   // Secondary colors
+//   secondary: "#F2F2F7",
+//   secondaryForeground: "#18181b",
+
+//   // Muted colors
+//   muted: "#78788033",
+//   mutedForeground: "#71717a",
+
+//   // Accent colors
+//   accent: "#F2F2F7",
+//   accentForeground: "#18181b",
+
+//   // Destructive colors
+//   destructive: "#ef4444",
+//   destructiveForeground: "#FFFFFF",
+
+//   // Border and input
+//   border: "#C6C6C8",
+//   input: "#e4e4e7",
+//   ring: "#a1a1aa",
+
+//   // Text colors
+//   text: "#000000",
+//   textMuted: "#71717a",
+
+//   // Legacy support for existing components
+//   tint: "#18181b",
+//   icon: "#71717a",
+//   tabIconDefault: "#71717a",
+//   tabIconSelected: "#18181b",
+
+//   // Default buttons, links, Send button, selected tabs
+//   blue: "#007AFF",
+
+//   // Success states, FaceTime buttons, completed tasks
+//   green: "#34C759",
+
+//   // Delete buttons, error states, critical alerts
+//   red: "#FF3B30",
+
+//   // VoiceOver highlights, warning states
+//   orange: "#FF9500",
+
+//   // Notes app accent, Reminders highlights
+//   yellow: "#FFCC00",
+
+//   // Pink accent color for various UI elements
+//   pink: "#FF2D92",
+
+//   // Purple accent for creative apps and features
+//   purple: "#AF52DE",
+
+//   // Teal accent for communication features
+//   teal: "#5AC8FA",
+
+//   // Indigo accent for system features
+//   indigo: "#5856D6",
+// };
+
 const lightColors = {
   // Base colors
-  background: "#FFFFFF",
-  foreground: "#000000",
+  background: "#FFFFFF", // Main app background is pure white
+  foreground: "#18181b", // Very dark grey/black for main text
 
   // Card colors
-  card: "#F1F5F9",
-  cardForeground: "#000000",
+  card: "#f8fafb", // CHANGED: The cards in the screenshot are White, not off-white
+  // card: "#f3f3f3", // CHANGED: The cards in the screenshot are White, not off-white
+  cardForeground: "#18181b",
 
   // Popover colors
-  popover: "#F2F2F7",
-  popoverForeground: "#000000",
+  popover: "#FFFFFF",
+  popoverForeground: "#18181b",
 
-  // Primary colors
-  primary: "#18181b",
+  // Primary colors (The "Masterji" Orange)
+  primary: "#F37021", // UPDATED: Exact match for the "View All" button
   primaryForeground: "#FFFFFF",
 
-  // Secondary colors
-  secondary: "#F2F2F7",
+  // Secondary colors (Used for standard buttons like "Join Now")
+  secondary: "#FFFFFF",
   secondaryForeground: "#18181b",
 
-  // Muted colors
-  muted: "#78788033",
+  // Muted colors (Subtitles like "Ready to code?")
+  muted: "#f8fafb",
   mutedForeground: "#71717a",
 
-  // Accent colors
-  accent: "#F2F2F7",
+  // Accent colors (Used for button presses or list items)
+  accent: "#F4F4F5",
   accentForeground: "#18181b",
 
-  // Destructive colors
-  destructive: "#ef4444",
+  // Destructive colors (The "Sign Out" button)
+  destructive: "#EF4444", // UPDATED: Matches the Red button exactly
   destructiveForeground: "#FFFFFF",
 
   // Border and input
-  border: "#C6C6C8",
-  input: "#e4e4e7",
-  ring: "#a1a1aa",
+  border: "#E4E4E7", // UPDATED: This is the specific grey used for Card Borders
+  input: "#E4E4E7",
+  ring: "#F37021", // Focus ring matches primary color
 
   // Text colors
-  text: "#000000",
-  textMuted: "#71717a",
+  text: "#18181b",
+  textMuted: "#71717a", // Matches "Ends Nov 21" text
 
-  // Legacy support for existing components
-  tint: "#18181b",
-  icon: "#71717a",
+  // Legacy support / Icon colors
+  tint: "#F37021",
+  icon: "#71717a", // Inactive tab icons
   tabIconDefault: "#71717a",
-  tabIconSelected: "#18181b",
+  tabIconSelected: "#F37021", // Active tab icons (Orange)
 
-  // Default buttons, links, Send button, selected tabs
-  blue: "#007AFF",
+  // --- STATUS COLORS (From your Screenshots) ---
 
-  // Success states, FaceTime buttons, completed tasks
-  green: "#34C759",
+  // Blue (Used in "Beta" tag)
+  blue: "#3B82F6",
 
-  // Delete buttons, error states, critical alerts
-  red: "#FF3B30",
+  // Green (Used in "Active" badge text)
+  // NOTE: The badge background is typically lighter (e.g., #DCFCE7)
+  green: "#16A34A",
 
-  // VoiceOver highlights, warning states
-  orange: "#FF9500",
+  // Red (Error states)
+  red: "#EF4444",
 
-  // Notes app accent, Reminders highlights
-  yellow: "#FFCC00",
+  // Orange (Warning)
+  orange: "#F97316",
 
-  // Pink accent color for various UI elements
-  pink: "#FF2D92",
-
-  // Purple accent for creative apps and features
-  purple: "#AF52DE",
-
-  // Teal accent for communication features
-  teal: "#5AC8FA",
-
-  // Indigo accent for system features
-  indigo: "#5856D6",
+  // Specific UI Highlights
+  yellow: "#EAB308", // Used for the "XP" Star icon
+  pink: "#EC4899",
+  purple: "#A855F7",
+  teal: "#14B8A6",
+  indigo: "#6366F1",
 };
-
 const darkColors = {
   // Base colors
   background: "#000000",

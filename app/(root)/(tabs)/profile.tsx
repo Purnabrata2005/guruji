@@ -1,281 +1,379 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons"; // Import Ionicons
+import { Star } from "lucide-react-native"; // Import icons
 import React from "react";
-import {
-  GestureResponderEvent,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { showErrorAlert, showSuccessAlert } from "@/components/ui/alert";
-import { settings as SETTINGS } from "@/constants/data";
+import CodingSummaryCard from "@/components/CodingSummaryCard";
+import GroupedList from "@/components/GroupedList";
+import JourneyCard, { JourneyItem } from "@/components/JourneyCard";
+import { Card } from "@/components/ui/card"; // Import Card
+import { Icon } from "@/components/ui/icon"; // Import Icon helper
+
+import { Text as NText } from "@/components/ui/text";
+import icons from "@/constants/icons";
 import { useColor } from "@/hooks/useColor";
-import { FONT_SIZE } from "@/theme/globals";
 
-/* Types */
-type IoniconName = keyof typeof Ionicons.glyphMap;
-
-interface SettingsItemProp {
-  icon: IoniconName;
+// --- Data Types ---
+interface SectionHeader {
+  type: "header";
   title: string;
-  onPress?: (e?: GestureResponderEvent) => void;
-  textColor?: string;
-  showArrow?: boolean;
 }
 
-/* SettingsItem */
-/* memoized for perf */
-const SettingsItem = React.memo(function SettingsItem({
-  icon,
-  title,
-  onPress,
-  textColor,
-  showArrow = true,
-}: SettingsItemProp) {
-  const defaultTextColor = useColor("text");
-  const finalTextColor = textColor || defaultTextColor;
+interface BadgeSection {
+  type: "badges";
+}
 
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.7}
-      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      accessibilityRole="button"
-      accessibilityLabel={title}
-      style={styles.settingsItemContainer}>
-      <View style={styles.settingsItemLeft}>
-        <Ionicons name={icon} size={24} color={finalTextColor} />
-        <Text style={[styles.settingsItemText, { color: finalTextColor }]}>
-          {title}
-        </Text>
-      </View>
+interface GroupedSection {
+  type: "grouped-list";
+  items: JourneyItem[];
+}
 
-      {showArrow && (
-        <Ionicons
-          name="chevron-forward-outline"
-          size={20}
-          color={finalTextColor}
-        />
-      )}
-    </TouchableOpacity>
-  );
-});
+type ProfileListItem =
+  | JourneyItem
+  | SectionHeader
+  | BadgeSection
+  | GroupedSection;
 
-/* RoundIconButton */
-/* Reusable circular icon button used for edit camera */
-const RoundIconButton = ({
-  name,
-  size = 20,
-  bg,
-  fg,
-  onPress,
-  style,
-}: {
-  name: IoniconName;
-  size?: number;
-  bg?: string;
-  fg?: string;
-  onPress?: () => void;
-  style?: any;
-}) => (
-  <TouchableOpacity
-    onPress={onPress}
-    activeOpacity={0.75}
-    style={[styles.roundButton, { backgroundColor: bg }, style]}
-    accessibilityRole="button"
-    accessibilityLabel="Edit avatar">
-    <Ionicons name={name} size={size} color={fg} />
-  </TouchableOpacity>
-);
+const Profile = () => {
+  // --- Hooks ---
 
-/* Profile Screen */
-const Profile: React.FC = () => {
-  const secondaryColor = useColor("secondary");
-  const backgroundColor = useColor("background");
-  const textColor = useColor("text");
-  const borderColor = useColor("border");
-  const destructiveColor = useColor("destructive");
-
-  const handleLogout = async () => {
-    const result = true;
-    if (result) {
-      showSuccessAlert("Success", "Logged out successfully");
-    } else {
-      showErrorAlert("Error", "Failed to logout");
-    }
+  // Fallback user data
+  const user = {
+    name: "Nandan Manna",
+    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+    email: "nandan7602831377@gmail.com",
   };
 
-  const user = {
-    name: "John Doe",
-    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+  const backgroundColor = useColor("background");
+  const textColor = useColor("text");
+  const textColorMuted = useColor("textMuted");
+  const primaryColor = useColor("blue");
+  const cardColor = useColor("card"); // Added card color
+  const yellowColor = useColor("yellow"); // Added yellow
+  const greenColor = useColor("green"); // Added green
+  const borderColor = useColor("border"); // Added border color
+
+  // --- Mock Data for Coding Summary ---
+  const codingStats = {
+    totalSolved: 0,
+    totalProblems: 578,
+    acceptanceRate: 0,
+    easy: { solved: 0, total: 141, attempting: 1, unsolved: 141, accepted: 0 },
+    medium: {
+      solved: 0,
+      total: 338,
+      attempting: 0,
+      unsolved: 338,
+      accepted: 0,
+    },
+    hard: { solved: 0, total: 99, attempting: 0, unsolved: 99, accepted: 0 },
+  };
+
+  // --- Profile Header Component ---
+  const ProfileHeader = () => (
+    <View style={styles.headerContainer}>
+      {/* 1. Avatar & Info */}
+      <View style={styles.profileInfo}>
+        <View style={[styles.avatarWrapper, { borderColor: primaryColor }]}>
+          <Image
+            source={{ uri: user.avatar }}
+            style={[styles.avatar, { borderColor: backgroundColor }]}
+          />
+        </View>
+
+        <View style={styles.nameRow}>
+          <NText style={[styles.nameText, { color: textColor }]}>
+            {user.name}
+          </NText>
+          <View style={[styles.betaBadge, { backgroundColor: "#DBEAFE" }]}>
+            <NText style={[styles.betaText, { color: "#2563EB" }]}>Beta</NText>
+          </View>
+        </View>
+
+        <NText style={[styles.emailText, { color: textColorMuted }]}>
+          {user.email}
+        </NText>
+
+        {/* Google Button */}
+        <View style={styles.googleButton}>
+          <Image
+            source={icons.google}
+            style={styles.googleIcon}
+            resizeMode="contain"
+          />
+          <NText style={styles.googleButtonText}>Connected via Google</NText>
+        </View>
+      </View>
+
+      {/* 2. Progress Section (Inserted Here) */}
+      <View style={styles.sectionContainer}>
+        <View style={styles.sectionHeader}>
+          <NText
+            variant="title"
+            style={[styles.sectionTitle, { color: textColor }]}>
+            Progress
+          </NText>
+        </View>
+
+        <View style={styles.cardsContainer}>
+          {/* XP Card */}
+          <Card style={styles.cardStyle}>
+            <View style={styles.cardHeader}>
+              <NText
+                variant="caption"
+                style={[styles.cardLabel, { color: textColorMuted }]}>
+                XP
+              </NText>
+              <Icon name={Star} color={yellowColor} size={20} />
+            </View>
+            <NText style={[styles.cardValue, { color: textColor }]}>0</NText>
+          </Card>
+
+          {/* Byte Vault Card */}
+          <Card style={styles.cardStyle}>
+            <View style={styles.cardHeader}>
+              <NText
+                variant="caption"
+                style={[styles.cardLabel, { color: textColorMuted }]}>
+                Byte Vault
+              </NText>
+              {/* Using Ionicons here for the arrow to match screenshot style if needed, or standard icon */}
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={textColorMuted}
+              />
+            </View>
+            <NText style={[styles.cardValue, { color: textColor }]}>99</NText>
+          </Card>
+        </View>
+      </View>
+
+      {/* 3. Coding Summary Section */}
+      <View style={[styles.sectionContainer, { marginTop: 24 }]}>
+        <View style={styles.sectionHeader}>
+          <NText style={[styles.sectionTitle, { color: textColor }]}>
+            Coding Summary
+          </NText>
+        </View>
+        <CodingSummaryCard stats={codingStats} />
+      </View>
+    </View>
+  );
+
+  // --- List Data ---
+  const data: ProfileListItem[] = [
+    // 2. More Section
+    { type: "header", title: "More" },
+    {
+      id: "submission",
+      title: "Recent Submissions",
+      subtitle: "View your coding submission history",
+      icon: "code-slash",
+      iconColor: "orange",
+    } as JourneyItem,
+    {
+      id: "preferences",
+      title: "Preferences",
+      subtitle: "Customize your app settings and preferences",
+      icon: "settings",
+      iconColor: "orange",
+    } as JourneyItem,
+    {
+      id: "bug",
+      title: "Report a Bug",
+      subtitle: "Found an issue? Open GitHub and file a report",
+      icon: "bug",
+      iconColor: "red",
+    } as JourneyItem,
+
+    // 3. Account Section
+    { type: "header", title: "Account" },
+    {
+      type: "grouped-list",
+      items: [
+        {
+          id: "delete",
+          title: "Delete account",
+          subtitle: "Opens masterji.co/delete-account",
+          icon: "trash",
+          iconColor: "orange",
+        },
+        {
+          id: "privacy",
+          title: "Privacy policy",
+          subtitle: "How we handle and protect your data",
+          icon: "document-text",
+          iconColor: "orange",
+        },
+        {
+          id: "support",
+          title: "Support",
+          subtitle: "Get help or email dev@chaicode.com",
+          icon: "help-circle",
+          iconColor: "orange",
+        },
+      ],
+    } as GroupedSection,
+  ];
+
+  const renderHeader = (title: string) => (
+    <View style={styles.sectionHeader}>
+      <NText style={[styles.sectionTitle, { color: textColor }]}>{title}</NText>
+    </View>
+  );
+
+  const renderItem = ({ item }: { item: ProfileListItem }) => {
+    if ("type" in item && item.type === "header") {
+      return <View style={{ marginTop: 12 }}>{renderHeader(item.title)}</View>;
+    }
+
+    if ("type" in item && item.type === "grouped-list") {
+      return (
+        <View style={styles.sectionContainer}>
+          <GroupedList items={item.items} onItemPress={() => {}} />
+        </View>
+      );
+    }
+
+    // Standard Journey Items (More Section)
+    return (
+      <View>
+        <JourneyCard item={item as JourneyItem} onPress={() => {}} />
+      </View>
+    );
   };
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      <ScrollView
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) =>
+          "id" in item ? item.id : `section-${index}`
+        }
+        renderItem={renderItem}
+        contentContainerStyle={styles.flatListContent}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: textColor }]}>
-            Profile
-          </Text>
-
-          <TouchableOpacity
-            accessibilityRole="button"
-            accessibilityLabel="Notifications"
-            activeOpacity={0.7}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-            <Ionicons
-              name="notifications-outline"
-              size={24}
-              color={textColor}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.profileInfoContainer}>
-          <View style={styles.avatarContainer}>
-            <Image source={{ uri: user?.avatar }} style={styles.avatar} />
-
-            <RoundIconButton
-              name="camera-outline"
-              size={18}
-              bg={secondaryColor}
-              fg={textColor}
-              style={styles.editButtonPosition}
-              onPress={() => {
-                /* open edit avatar action */
-              }}
-            />
-
-            <Text style={[styles.userName, { color: textColor }]}>
-              {user?.name}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.settingsSection}>
-          <SettingsItem icon="calendar-outline" title="My Bookings" />
-          <SettingsItem icon="wallet-outline" title="Payments" />
-        </View>
-
-        <View
-          style={[styles.settingsSection, styles.borderTop, { borderColor }]}>
-          {SETTINGS.slice(2).map(item => (
-            <SettingsItem
-              key={item.title}
-              icon={item.icon as IoniconName}
-              title={item.title}
-            />
-          ))}
-        </View>
-
-        <View
-          style={[styles.settingsSection, styles.borderTop, { borderColor }]}>
-          <SettingsItem
-            icon="log-out-outline"
-            title="Logout"
-            textColor={destructiveColor}
-            showArrow={false}
-            onPress={handleLogout}
-          />
-        </View>
-      </ScrollView>
+        ListHeaderComponent={ProfileHeader}
+      />
     </SafeAreaView>
   );
 };
-
-export default Profile;
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  scrollContainer: {
-    paddingBottom: 128,
-    paddingHorizontal: 28,
+  flatListContent: {
+    paddingHorizontal: 14,
+    paddingBottom: 100,
   },
-
-  header: {
+  // --- Structural Styles ---
+  sectionContainer: {
+    marginTop: 0,
+  },
+  sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 20,
+    marginBottom: 8,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontFamily: "Rubik-Bold",
+  sectionTitle: {
+    fontSize: 18, // Matched to screenshot (larger bold title)
+    marginLeft: 10,
+    fontWeight: "bold",
   },
 
-  profileInfoContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
+  // --- Header Styles ---
+  headerContainer: {
+    marginTop: 12,
   },
-  avatarContainer: {
-    flexDirection: "column",
+  profileInfo: {
     alignItems: "center",
-    position: "relative",
-    marginTop: 20,
+    marginBottom: 24,
+  },
+  avatarWrapper: {
+    marginBottom: 16,
+    padding: 3,
+    borderWidth: 0,
+    borderRadius: 60,
+    backgroundColor: "#3B82F6",
   },
   avatar: {
-    width: 176,
-    height: 176,
-    borderRadius: 88,
-    position: "relative",
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
   },
-
-  /* Round icon button */
-  roundButton: {
-    padding: 10,
-    borderRadius: 999,
+  nameRow: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.18,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    gap: 8,
+    marginBottom: 4,
   },
-  editButtonPosition: {
-    position: "absolute",
-    bottom: 44,
-    right: 8,
-  },
-
-  userName: {
+  nameText: {
     fontSize: 24,
-    fontFamily: "Rubik-Bold",
-    marginTop: 8,
+    fontFamily: "Poppins-Bold",
   },
-
-  settingsSection: {
-    flexDirection: "column",
-    marginTop: 40,
+  betaBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 12,
   },
-  borderTop: {
-    borderTopWidth: 1,
-    paddingTop: 20,
-    marginTop: 20,
+  betaText: {
+    fontSize: 12,
+    fontFamily: "Poppins-Medium",
   },
-
-  settingsItemContainer: {
+  emailText: {
+    fontSize: 14,
+    fontFamily: "Poppins-Medium",
+    marginBottom: 16,
+  },
+  googleButton: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 12,
+    backgroundColor: "#EFF6FF",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
   },
-  settingsItemLeft: {
+  googleIcon: {
+    width: 16,
+    height: 16,
+  },
+  googleButtonText: {
+    color: "#2563EB",
+    fontSize: 14,
+    fontFamily: "Poppins-Medium",
+  },
+
+  // --- Progress Card Styles (Matches Avatar.jpeg) ---
+  cardsContainer: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 12,
   },
-  settingsItemText: {
-    fontSize: FONT_SIZE + 1,
-    fontFamily: "Rubik-Medium",
+  cardStyle: {
+    flex: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    justifyContent: "space-between",
+  },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  cardLabel: {
+    fontSize: 14,
+    fontFamily: "Poppins-Medium", // Slightly bolder per screenshot
+    fontWeight: "600",
+  },
+  cardValue: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
+
+export default Profile;

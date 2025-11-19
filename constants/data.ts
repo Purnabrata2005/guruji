@@ -154,3 +154,42 @@ export const gallery = [
     id: 6,
   },
 ];
+
+// src/constants/journeyData.ts (or put this above HomeScreen)
+export interface JourneyItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: keyof typeof Ionicons.glyphMap; // Name of the lucide icon
+  iconColor: "primary" | "textMuted";
+}
+export const JOURNEY_ITEMS: JourneyItem[] = [
+  {
+    id: "1",
+    title: "Challenges",
+    subtitle: "Compete with others and level up",
+    icon: "trophy",
+    iconColor: "primary", // Use primary color (Orange)
+  },
+  {
+    id: "2",
+    title: "Coding Problems",
+    subtitle: "Sharpen your coding skills daily",
+    icon: "code",
+    iconColor: "textMuted", // Use muted color (Grey)
+  },
+  {
+    id: "3",
+    title: "Quizzes",
+    subtitle: "Get competitive and climb the leaderboard",
+    icon: "clipboard",
+    iconColor: "textMuted",
+  },
+  {
+    id: "4",
+    title: "Profile",
+    subtitle: "Track your coding progress",
+    icon: "person",
+    iconColor: "textMuted",
+  },
+];

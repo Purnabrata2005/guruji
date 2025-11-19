@@ -1,3 +1,4 @@
+import { useColor } from "@/hooks/useColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   Icon,
@@ -8,29 +9,26 @@ import {
 import { Platform } from "react-native";
 
 const TabsLayout = () => {
+  const primaryColor = useColor("primary");
   return (
     <NativeTabs
-      backgroundColor="#fefefe"
+      backgroundColor="#F8F9FA"
       tintColor="#e4e3e1"
       iconColor={{
         default: "#5F6368",
-        selected: "#1a1a1b",
+        selected: primaryColor,
       }}
       labelStyle={{
         default: {
           color: "#5F6368",
           fontSize: 13,
-          fontFamily: "Rubik-Medium",
-          fontWeight: "400",
         },
         selected: {
-          color: "#1a1a1b",
-          fontFamily: "Rubik-SemiBold",
+          color: primaryColor,
           fontSize: 13,
-          fontWeight: "600",
         },
       }}
-      indicatorColor="#e4e3e1" // Blue indicator (Android only)
+      indicatorColor="#e4e3e1"
       minimizeBehavior="onScrollDown"
       shadowColor="#000000"
       disableTransparentOnScrollEdge={true}>
@@ -45,9 +43,7 @@ const TabsLayout = () => {
               }}
             />
           ),
-          android: (
-            <Icon src={<VectorIcon family={Ionicons} name="home-outline" />} />
-          ),
+          android: <Icon src={<VectorIcon family={Ionicons} name="home" />} />,
         })}
       </NativeTabs.Trigger>
 
@@ -63,9 +59,7 @@ const TabsLayout = () => {
             />
           ),
           android: (
-            <Icon
-              src={<VectorIcon family={Ionicons} name="search-outline" />}
-            />
+            <Icon src={<VectorIcon family={Ionicons} name="search" />} />
           ),
         })}
       </NativeTabs.Trigger>
@@ -82,9 +76,7 @@ const TabsLayout = () => {
             />
           ),
           android: (
-            <Icon
-              src={<VectorIcon family={Ionicons} name="person-outline" />}
-            />
+            <Icon src={<VectorIcon family={Ionicons} name="person" />} />
           ),
         })}
       </NativeTabs.Trigger>
