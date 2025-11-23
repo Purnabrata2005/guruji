@@ -85,3 +85,70 @@ const TabsLayout = () => {
 };
 
 export default TabsLayout;
+// import Ionicons from "@expo/vector-icons/Ionicons";
+// import { Tabs } from "expo-router";
+// import { Platform } from "react-native";
+
+// export default function TabLayout() {
+//   return (
+//     <Tabs
+//       screenOptions={{
+//         tabBarActiveTintColor: "#007bff", // active color
+//         tabBarInactiveTintColor: "#5F6368", // inactive color
+//         tabBarStyle: {
+//           backgroundColor: "#F8F9FA",
+//           borderTopColor: "#e4e3e1",
+//         },
+//       }}>
+//       {/* HOME */}
+//       <Tabs.Screen
+//         name="index"
+//         options={{
+//           title: "Home",
+//           tabBarIcon: ({ color, focused }) =>
+//             Platform.OS === "ios" ? (
+//               <Ionicons
+//                 name={focused ? "home" : "home-outline"}
+//                 size={24}
+//                 color={color}
+//               />
+//             ) : (
+//               <Ionicons name="home-outline" size={24} color={color} />
+//             ),
+//         }}
+//       />
+
+//       {/* EXPLORE */}
+//       <Tabs.Screen
+//         name="challenge"
+//         options={{
+//           title: "Explore",
+//           tabBarIcon: ({ color }) =>
+//             Platform.OS === "ios" ? (
+//               <Ionicons name="search" size={24} color={color} />
+//             ) : (
+//               <Ionicons name="search" size={24} color={color} />
+//             ),
+//         }}
+//       />
+
+//       {/* PROFILE */}
+//       <Tabs.Screen
+//         name="profile"
+//         options={{
+//           title: "Profile",
+//           tabBarIcon: ({ color, focused }) =>
+//             Platform.OS === "ios" ? (
+//               <Ionicons
+//                 name={focused ? "person" : "person-outline"}
+//                 size={24}
+//                 color={color}
+//               />
+//             ) : (
+//               <Ionicons name="person-outline" size={24} color={color} />
+//             ),
+//         }}
+//       />
+//     </Tabs>
+//   );
+// }

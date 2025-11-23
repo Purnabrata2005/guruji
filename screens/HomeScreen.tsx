@@ -14,14 +14,9 @@ import JourneyCard from "@/components/JourneyCard";
 import { FeaturedTestCard } from "@/components/TestCard";
 import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import { Image } from "@/components/ui/image";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Text as NText } from "@/components/ui/text";
-import {
-  homeChallenges,
-  JOURNEY_ITEMS,
-  profile,
-  tests,
-} from "@/constants/data";
+import { homeChallenges, JOURNEY_ITEMS, tests } from "@/constants/data";
 import { useColor } from "@/hooks/useColor";
 
 const HomeScreen = () => {
@@ -97,15 +92,8 @@ const HomeScreen = () => {
                   Ready to code?
                 </NText>
               </View>
-
-              <View style={[styles.profileRing, { borderColor }]}>
-                <Image
-                  source={{ uri: profile.avatar }}
-                  width={40}
-                  height={40}
-                  style={{ borderRadius: 20 }}
-                />
-              </View>
+              {/* theme change */}
+              <ModeToggle />
             </View>
 
             <View style={styles.headerPadding}>

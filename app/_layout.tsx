@@ -1,8 +1,13 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Colors } from "@/theme/colors";
+import { ThemeProvider } from "@/theme/theme-provider";
 import { useFonts } from "expo-font";
+import * as NavigationBar from "expo-navigation-bar";
 import { Stack } from "expo-router";
 import Head from "expo-router/head";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { setBackgroundColorAsync } from "expo-system-ui";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -16,7 +21,7 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
-  //  FONTS  //
+  const colorScheme = useColorScheme() || "light";
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
@@ -24,7 +29,6 @@ export default function RootLayout() {
     "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
     "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
-    ...Ionicons.font, // Ionicons font
   });
 
   //  SPLASH HIDE  //
@@ -34,6 +38,20 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      NavigationBar.setButtonStyleAsync(
+        colorScheme === "light" ? "dark" : "light",
+      );
+    }
+  }, [colorScheme]);
+
+  // Keep the root view background color in sync with the current theme
+  useEffect(() => {
+    setBackgroundColorAsync(
+      colorScheme === "dark" ? Colors.dark.background : Colors.light.background,
+    );
+  }, [colorScheme]);
   if (!fontsLoaded) return null;
 
   return (
@@ -43,9 +61,16 @@ export default function RootLayout() {
           <meta name="color-scheme" content="light dark" />
         </Head>
       )}
-      <SafeAreaProvider>
-        <AppNavigator />
-      </SafeAreaProvider>
+      <ThemeProvider>
+        <SafeAreaProvider>
+          <StatusBar
+            style={colorScheme === "dark" ? "light" : "dark"}
+            animated
+          />
+          <AppNavigator />
+          <StatusBar style="auto" />
+        </SafeAreaProvider>
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }
@@ -55,6 +80,7 @@ function AppNavigator() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="+not-found" />
       {/* Public screens */}
       <Stack.Screen name="(auth)" />
 

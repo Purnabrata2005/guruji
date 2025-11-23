@@ -192,13 +192,13 @@ export const Button = forwardRef<View, ButtonProps>(
     const getIconSize = (): number => {
       switch (size) {
         case "sm":
-          return 16;
+          return 14;
         case "lg":
-          return 24;
+          return 22;
         case "icon":
-          return 20;
-        default:
           return 18;
+        default:
+          return 16;
       }
     };
 
