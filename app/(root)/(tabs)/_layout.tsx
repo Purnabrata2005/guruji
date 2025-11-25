@@ -14,7 +14,7 @@ const TabsLayout = () => {
   const borderColor = useColor("border");
   const textMuted = useColor("textMuted");
   const text = useColor("text");
-  
+
   return (
     <NativeTabs
       backgroundColor={backgroundColor}

@@ -1,15 +1,14 @@
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/theme/colors";
 import { ThemeProvider } from "@/theme/theme-provider";
-import { ThemeContextProvider, useTheme } from "@/theme/theme-context";
 import { useFonts } from "expo-font";
 import * as NavigationBar from "expo-navigation-bar";
 import { Stack } from "expo-router";
 import Head from "expo-router/head";
 import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
 import { setBackgroundColorAsync } from "expo-system-ui";
-import { useEffect } from "react";
-import { Platform } from "react-native";
+import { useCallback, useEffect } from "react";
+import { Platform, StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -20,47 +19,8 @@ SplashScreen.setOptions({
   fade: true,
 });
 
-function RootLayoutContent() {
-  const { colorScheme } = useTheme();
-
-  useEffect(() => {
-    if (Platform.OS === "android") {
-      NavigationBar.setButtonStyleAsync(
-        colorScheme === "light" ? "dark" : "light",
-      );
-    }
-  }, [colorScheme]);
-
-  // Keep the root view background color in sync with the current theme
-  useEffect(() => {
-    setBackgroundColorAsync(
-      colorScheme === "dark" ? Colors.dark.background : Colors.light.background,
-    );
-  }, [colorScheme]);
-  if (!fontsLoaded) return null;
-
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      {Platform.OS === "web" && (
-        <Head>
-          <meta name="color-scheme" content="light dark" />
-        </Head>
-      )}
-      <ThemeProvider>
-        <SafeAreaProvider>
-          <StatusBar
-            style={colorScheme === "dark" ? "light" : "dark"}
-            animated
-          />
-          <AppNavigator />
-          <StatusBar style="auto" />
-        </SafeAreaProvider>
-      </ThemeProvider>
-    </GestureHandlerRootView>
-  );
-}
-
 export default function RootLayout() {
+  const colorScheme = useColorScheme() || "light";
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
@@ -77,12 +37,43 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      NavigationBar.setButtonStyleAsync(
+        colorScheme === "light" ? "dark" : "light",
+      );
+    }
+  }, [colorScheme]);
+
+  // Keep the root view background color in sync with the current theme
+  useEffect(() => {
+    setBackgroundColorAsync(
+      colorScheme === "dark" ? Colors.dark.background : Colors.light.background,
+    );
+  }, [colorScheme]);
+  const onLayoutRootView = useCallback(() => {
+    SplashScreen.hideAsync();
+  }, []);
   if (!fontsLoaded) return null;
 
   return (
-    <ThemeContextProvider>
-      <RootLayoutContent />
-    </ThemeContextProvider>
+    <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      {Platform.OS === "web" && (
+        <Head>
+          <meta name="color-scheme" content="light dark" />
+        </Head>
+      )}
+      <ThemeProvider>
+        <SafeAreaProvider>
+          {/* <StatusBar
+            barStyle={colorScheme === "dark" ? "light" : "dark"}
+            animated
+          /> */}
+          <StatusBar barStyle="default" animated />
+          <AppNavigator />
+        </SafeAreaProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 

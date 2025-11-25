@@ -1,5 +1,6 @@
 import { Button, ButtonSize, ButtonVariant } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { useColor } from "@/hooks/useColor";
 import { useModeToggle } from "@/hooks/useModeToggle";
 import { Moon, Sun } from "lucide-react-native";
 import { useEffect, useState } from "react";
@@ -17,10 +18,11 @@ type Props = {
 
 export const ModeToggle = ({ variant = "outline", size = "icon" }: Props) => {
   const { toggleMode, isDark } = useModeToggle();
+  const primaryColor = useColor("primary");
   const rotation = useSharedValue(0);
   const scale = useSharedValue(1);
   const [showIcon, setShowIcon] = useState<"sun" | "moon">(
-    isDark ? "moon" : "sun",
+    isDark ? "sun" : "moon",
   );
 
   useEffect(() => {
@@ -48,7 +50,12 @@ export const ModeToggle = ({ variant = "outline", size = "icon" }: Props) => {
   return (
     <Button variant={variant} size={size} onPress={toggleMode}>
       <Animated.View style={animatedStyle}>
-        <Icon name={showIcon === "moon" ? Moon : Sun} size={24} />
+        <Icon
+          color={primaryColor}
+          fill={primaryColor}
+          name={showIcon === "moon" ? Moon : Sun}
+          size={24}
+        />
       </Animated.View>
     </Button>
   );

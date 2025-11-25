@@ -5,7 +5,7 @@ import {
 } from "@react-navigation/native";
 import "react-native-reanimated";
 
-import { useTheme } from "@/theme/theme-context";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/theme/colors";
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const ThemeProvider = ({ children }: Props) => {
-  const { colorScheme } = useTheme();
+  const colorScheme = useColorScheme();
 
   // Create custom themes that use your Colors
   const customLightTheme = {
