@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 4,
   },
-  nameText: { fontSize: 24, fontFamily: "Poppins-Bold" },
+  nameText: { fontSize: 24, fontFamily: "Inter-Bold" },
 
   betaBadge: {
     backgroundColor: "#DBEAFE",
@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 12,
   },
-  betaText: { fontSize: 12, color: "#2563EB", fontFamily: "Poppins-Medium" },
+  betaText: { fontSize: 12, color: "#2563EB", fontFamily: "Inter-Medium" },
 
-  emailText: { fontSize: 14, marginBottom: 16, fontFamily: "Poppins-Medium" },
+  emailText: { fontSize: 14, marginBottom: 16, fontFamily: "Inter-Medium" },
 
   googleButton: {
     flexDirection: "row",
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   googleButtonText: {
     color: "#2563EB",
     fontSize: 14,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Inter-Medium",
   },
 
   // Generic Sections
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   cardsContainer: { flexDirection: "row", gap: 12 },
   cardStyle: { flex: 1, paddingHorizontal: 14, paddingVertical: 12 },
   cardHeader: { flexDirection: "row", justifyContent: "space-between" },
-  cardLabel: { fontSize: 14, fontFamily: "Poppins-Medium", fontWeight: "600" },
+  cardLabel: { fontSize: 14, fontFamily: "Inter-Medium", fontWeight: "600" },
   cardValue: { fontSize: 16, fontWeight: "bold" },
 });
 

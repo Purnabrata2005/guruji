@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Inter-Bold",
     marginBottom: 6,
   },
   subtitleRow: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Inter-Regular",
   },
   tagsRow: {
     flexDirection: "row",
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   grayTagText: {
     color: "#6B7280",
     fontSize: 11,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Inter-Medium",
   },
   goldTag: {
     flexDirection: "row",
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   goldTagText: {
     color: "#D97706",
     fontSize: 11,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Inter-Medium",
   },
   footerRow: {
     flexDirection: "row",
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 12,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Inter-Regular",
   },
   viewButton: {
     flexDirection: "row",
@@ -225,9 +225,8 @@ const styles = StyleSheet.create({
   },
   viewText: {
     fontSize: 14,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Inter-Medium",
   },
 });
 
 export default FullChallengeCard;
-

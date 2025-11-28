@@ -46,7 +46,6 @@ const lightColors = {
   indigo: "#5856D6",
 };
 
-
 const darkColors = {
   background: "#121212",
   foreground: "#ffffff",

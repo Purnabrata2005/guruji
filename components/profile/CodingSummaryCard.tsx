@@ -170,19 +170,19 @@ const styles = StyleSheet.create({
   },
   headerLabel: {
     fontSize: 12,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Inter-Medium",
     marginBottom: 4,
   },
   totalCount: {
     fontSize: 24,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Inter-Bold",
   },
   totalTotal: {
     fontSize: 14,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Inter-Regular",
   },
   acceptanceContainer: { alignItems: "flex-end" },
-  acceptanceRate: { fontSize: 18, fontFamily: "Poppins-Bold" },
+  acceptanceRate: { fontSize: 18, fontFamily: "Inter-Bold" },
 
   divider: {
     height: 1,
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  difficultyLabel: { fontSize: 14, fontFamily: "Poppins-Bold" },
-  difficultyCount: { fontSize: 12, fontFamily: "Poppins-Regular" },
+  difficultyLabel: { fontSize: 14, fontFamily: "Inter-Bold" },
+  difficultyCount: { fontSize: 12, fontFamily: "Inter-Regular" },
 
   progressTrack: {
     height: 8,
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   statsFooter: {},
   statsText: {
     fontSize: 11,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Inter-Regular",
   },
 });
 

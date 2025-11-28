@@ -1,6 +1,14 @@
 import { Colors } from "@/theme/colors";
 import { ThemeProvider } from "@/theme/theme-provider";
-import { useFonts } from "expo-font";
+import {
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_800ExtraBold,
+  useFonts,
+} from "@expo-google-fonts/inter";
 import * as NavigationBar from "expo-navigation-bar";
 import { Stack } from "expo-router";
 import Head from "expo-router/head";
@@ -38,7 +46,7 @@ function InitialLayout() {
         <>
           <Stack.Screen name="(auth)" />
           <Stack.Screen
-            name="(root)"
+            name="(tabs)"
             options={{
               headerShown: false,
             }}
@@ -52,12 +60,12 @@ function InitialLayout() {
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
-    "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
-    "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
-    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
+    "Inter-Light": Inter_300Light,
+    "Inter-Regular": Inter_400Regular,
+    "Inter-Medium": Inter_500Medium,
+    "Inter-SemiBold": Inter_600SemiBold,
+    "Inter-Bold": Inter_700Bold,
+    "Inter-ExtraBold": Inter_800ExtraBold,
   });
 
   useEffect(() => {

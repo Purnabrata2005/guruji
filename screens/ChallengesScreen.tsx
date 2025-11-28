@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 14,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Inter-Regular",
     height: "100%",
   },
 
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 12,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Inter-Medium",
   },
 
   // List padding

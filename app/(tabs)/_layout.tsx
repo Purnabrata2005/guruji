@@ -1,4 +1,5 @@
 import CustomTabBar from "@/components/navigation/CustomTabBar";
+import { StyledTabs } from "@/components/navigation/tabs";
 import { useColor } from "@/hooks/useColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
@@ -8,13 +9,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const TabsLayout = () => {
   // Get safe area insets
   const insets = useSafeAreaInsets();
-  const primaryColor = useColor("primary");
   const backgroundColor = useColor("background");
   const borderColor = useColor("border");
   const textColor = useColor("text");
 
   return (
-    <Tabs
+    <StyledTabs
       tabBar={props => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
@@ -68,7 +68,7 @@ const TabsLayout = () => {
           ),
         }}
       />
-    </Tabs>
+    </StyledTabs>
   );
 };
 

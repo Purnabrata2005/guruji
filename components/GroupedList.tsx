@@ -105,12 +105,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Inter-Medium",
     letterSpacing: 0.2,
   },
   subtitle: {
     fontSize: 12,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Inter-Regular",
     lineHeight: 16,
   },
   divider: {

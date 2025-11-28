@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Inter-SemiBold",
     letterSpacing: 0.2,
   },
   subtitle: {
     fontSize: 13,
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Inter-Regular",
     lineHeight: 18,
   },
 });
